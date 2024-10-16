@@ -1,13 +1,17 @@
 ﻿using System.Text.RegularExpressions;
 using CalculatorLibrary;
+using System.Collections.Generic; // Importign the name space to create a List
 
 namespace CalculatorProgram
 {
     class Program
     {
+       
         static void Main(string[] args)
         {
             bool endApp = false;
+            int count = 0;
+          
             // Display title as the C# console calculator app.
             Console.WriteLine("Console Calculator in C#\r");
             Console.WriteLine("------------------------\n");
@@ -21,12 +25,25 @@ namespace CalculatorProgram
                 string? numInput1 = "";
                 string? numInput2 = "";
                 double result = 0;
+                double cleanNum1 = 0;
+                double cleanNum2 = 0;
+
+                // Ask the user to choose an operator.
+                Console.WriteLine("Choose an operator from the following list:");
+                Console.WriteLine("\ta - Add");
+                Console.WriteLine("\ts - Subtract");
+                Console.WriteLine("\tm - Multiply");
+                Console.WriteLine("\td - Divide");
+               
+                Console.Write("Your option? ");
+
+                string? op = Console.ReadLine();
 
                 // Ask the user to type the first number.
                 Console.Write("Type a number, and then press Enter: ");
                 numInput1 = Console.ReadLine();
 
-                double cleanNum1 = 0;
+                
                 while (!double.TryParse(numInput1, out cleanNum1))
                 {
                     Console.Write("This is not valid input. Please enter a numeric value: ");
@@ -37,22 +54,16 @@ namespace CalculatorProgram
                 Console.Write("Type another number, and then press Enter: ");
                 numInput2 = Console.ReadLine();
 
-                double cleanNum2 = 0;
+                
                 while (!double.TryParse(numInput2, out cleanNum2))
                 {
                     Console.Write("This is not valid input. Please enter a numeric value: ");
                     numInput2 = Console.ReadLine();
                 }
 
-                // Ask the user to choose an operator.
-                Console.WriteLine("Choose an operator from the following list:");
-                Console.WriteLine("\ta - Add");
-                Console.WriteLine("\ts - Subtract");
-                Console.WriteLine("\tm - Multiply");
-                Console.WriteLine("\td - Divide");
-                Console.Write("Your option? ");
+                
 
-                string? op = Console.ReadLine();
+               
 
                 // Validate input is not null, and matches the pattern
                 if (op == null || !Regex.IsMatch(op, "[a|s|m|d]"))
@@ -63,7 +74,8 @@ namespace CalculatorProgram
                 {
                     try
                     {
-                        result = calculator.DoOperation(cleanNum1, cleanNum2, op);
+                        result = calculator.DoOperation(cleanNum1, cleanNum2, op, count);
+                        
                         if (double.IsNaN(result))
                         {
                             Console.WriteLine("This operation will result in a mathematical error.\n");
@@ -77,7 +89,9 @@ namespace CalculatorProgram
                 }
                 Console.WriteLine("------------------------\n");
 
-                // Wait for the user to respond before closing.
+                // Show the number of uses at the end of each calculation.
+                // After, wait for the user to respond before closing.
+                Console.WriteLine( "You have used this app: " + ++count + " time(s).");
                 Console.Write("Press 'n' and Enter to close the app, or press any other key and Enter to continue: ");
                 if (Console.ReadLine() == "n") endApp = true;
 

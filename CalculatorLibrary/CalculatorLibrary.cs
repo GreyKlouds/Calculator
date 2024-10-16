@@ -17,8 +17,9 @@ namespace CalculatorLibrary
             writer.WritePropertyName("Operations");
             writer.WriteStartArray();
         }
-        public  double DoOperation(double num1, double num2, string op)
+        public double DoOperation(double num1, double num2, string op, int usageCount)
         {
+            
             double result = double.NaN; // Default value is "not-a-number" if an operation, such as division, could result in an error.
             writer.WriteStartObject();
             writer.WritePropertyName("Operand1");
@@ -32,14 +33,17 @@ namespace CalculatorLibrary
                 case "a":
                     result = num1 + num2;
                     writer.WriteValue("Add");
+                    usageCount++;
                     break;
                 case "s":
                     result = num1 - num2;
                     writer.WriteValue("Subtraction");
+                    usageCount++;
                     break;
                 case "m":
                     result = num1 * num2;
                     writer.WriteValue("Multiply");
+                    usageCount++;
                     break;
                 case "d":
                     // Ask the user to enter a non-zero divisor.
@@ -48,6 +52,7 @@ namespace CalculatorLibrary
                         result = num1 / num2;
                         writer.WriteValue("Divide");
                     }
+                    usageCount++;
                     break;
                 // Return text for an incorrect option entry.
                 default:
@@ -57,6 +62,20 @@ namespace CalculatorLibrary
             writer.WriteValue(result);
             writer.WriteEndObject();
             return result;
+        }
+
+        private List<double> getHistory(List<double> list)
+        {
+            foreach (double item in list) 
+            {
+                Console.WriteLine(item);
+            }
+            return list;
+        }
+
+        public void ShowUses(int count)
+        {
+            Console.WriteLine($"You have used this application {count} times.");
         }
 
         public void Finish()
