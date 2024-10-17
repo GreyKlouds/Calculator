@@ -3,11 +3,11 @@ using Newtonsoft.Json;
 
 namespace CalculatorLibrary
 {
-   public class Calculator
+    public class Calculator
     {
         JsonWriter writer;
-         
-        public Calculator() 
+
+        public Calculator()
         {
             StreamWriter logFile = File.CreateText("calculatorlog.json");
             logFile.AutoFlush = true;
@@ -19,7 +19,7 @@ namespace CalculatorLibrary
         }
         public double DoOperation(double num1, double num2, string op, int usageCount)
         {
-            
+            List<double> history = new List<double>();  
             double result = double.NaN; // Default value is "not-a-number" if an operation, such as division, could result in an error.
             writer.WriteStartObject();
             writer.WritePropertyName("Operand1");
@@ -27,21 +27,25 @@ namespace CalculatorLibrary
             writer.WritePropertyName("Operand2");
             writer.WriteValue(num2);
             writer.WritePropertyName("Operation");
+
             // Use a switch statement to do the math.
             switch (op)
             {
                 case "a":
                     result = num1 + num2;
+                    history.Add(result);
                     writer.WriteValue("Add");
                     usageCount++;
                     break;
                 case "s":
                     result = num1 - num2;
+                    history.Add(result);
                     writer.WriteValue("Subtraction");
                     usageCount++;
                     break;
                 case "m":
                     result = num1 * num2;
+                    history.Add(result);
                     writer.WriteValue("Multiply");
                     usageCount++;
                     break;
@@ -50,6 +54,7 @@ namespace CalculatorLibrary
                     if (num2 != 0)
                     {
                         result = num1 / num2;
+                        history.Add(result);
                         writer.WriteValue("Divide");
                     }
                     usageCount++;
@@ -64,9 +69,12 @@ namespace CalculatorLibrary
             return result;
         }
 
-        private List<double> getHistory(List<double> list)
+        public List<double> getHistory(List<double> list)
         {
-            foreach (double item in list) 
+            Console.WriteLine("\t\t\t Calculation history:");
+            Console.WriteLine("\t\t\t-----------------");
+
+            foreach (double item in list)
             {
                 Console.WriteLine(item);
             }
